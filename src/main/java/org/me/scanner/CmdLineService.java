@@ -5,12 +5,12 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.me.scanner.ScannerUtils.getFirstArgument;
+import static org.me.scanner.ScannerUtils.isNotEmpty;
 
 @ApplicationScoped
 public class CmdLineService {
@@ -19,11 +19,17 @@ public class CmdLineService {
         final String host = getFirstArgument(cmd);
         return Stream.of(cmd.getOptions())
                 .map(option -> {
-                    StringBuilder sb = new StringBuilder("-");
-                    sb.append(option.getOpt());
-                    if (option.hasArg() && option.getValue() != null) {
-                        sb.append(" ");
-                        sb.append(option.getValue());
+                    StringBuilder sb = new StringBuilder();
+                    if (isNotEmpty(option.getOpt())) {
+                        sb.append("-");
+                        sb.append(option.getOpt());
+                        if (option.hasArg() && isNotEmpty(option.getValue())) {
+                            sb.append(" ");
+                            sb.append(option.getValue());
+                        }
+                    } else {
+                        sb.append("--");
+                        sb.append(option.getLongOpt());
                     }
                     return sb.toString();
                 }).collect(Collectors.joining(" ", "nmap ", host));

@@ -1,14 +1,12 @@
 package org.me.scanner;
 
-import lombok.SneakyThrows;
-
 import javax.enterprise.context.ApplicationScoped;
+import java.io.IOException;
 
 @ApplicationScoped
 public class Scanner {
 
-    @SneakyThrows
-    public int execute(String command) {
+    public int execute(String command) throws InterruptedException, IOException {
         System.out.println("executing command: " + command);
         Process process = Runtime.getRuntime().exec(command);
         process.waitFor();
@@ -16,8 +14,7 @@ public class Scanner {
         return process.exitValue();
     }
 
-    @SneakyThrows
-    private void print(Process process) {
+    private void print(Process process) throws IOException {
         if (process.exitValue() == 0)
             System.out.println(new String(process.getInputStream().readAllBytes()));
         else

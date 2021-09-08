@@ -15,4 +15,12 @@ public class ScannerUtils {
     public static String getFirstArgument(CommandLine cmd) {
         return isArgument(cmd) ? " " + cmd.getArgs()[0] : "";
     }
+
+    public static boolean isEmpty(String s) {
+        return s == null || s.isEmpty();
+    }
+
+    public static boolean isNotEmpty(String s) {
+        return !isEmpty(s);
+    }
 }
